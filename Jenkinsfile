@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'ansible/ansible:default' } }
+    agent { docker { image 'willhallonline/ansible:2.9-alpine' } }
 
     environment {
         ANSIBLE_INVENTORY = credentials('DB_ANSIBLE_INVENTORY')
