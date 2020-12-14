@@ -12,8 +12,10 @@ pipeline {
             steps {
                 sh '''
                 echo "$SSH_PRIVATE_KEY" >key
+                echo "$ANSIBLE_INVENTORY" >inventory
+                chmod 0600 key
                 ansible-playbook \
-                    --inventory "$ANSIBLE_INVENTORY" \
+                    --inventory "inventory" \
                     --ssh-common-args '-o StrictHostKeyChecking=no' \
                     --extra-vars "{\"POSTGRES_PASSWORD\": \"$POSTGRES_PASSWORD\", \"SSH_PRIVATE_KEY_FILE\": \"key\"}" \
                     ./playbook.yml
