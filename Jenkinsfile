@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         ANSIBLE_INVENTORY = credentials('DB_ANSIBLE_INVENTORY')
-        SSH_PRIVATE_KEY   = credentials('DB_SSH_PRIVATE_KEY')
+        SSH_PRIVATE_KEY   = credentials('DB_SSH_PRIVATE_KEY_FILE')
         POSTGRES_PASSWORD = credentials('DB_POSTGRES_PASSWORD')
     }
 
@@ -12,7 +12,7 @@ pipeline {
             steps {
                 sh '''
                 eval $(ssh-agent -s)
-                echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+                cat "$SSH_PRIVATE_KEY" | tr -d '\r' |ssh-add -
                 echo "$ANSIBLE_INVENTORY" >inventory
                 ansible-playbook \
                     --inventory "inventory" \
