@@ -10,6 +10,6 @@
             --name database \
             -e PGDATA \
             -e POSTGRES_PASSWORD \
-            -v /var/backup/database:/var/lib/postgresql/data \
+            -v "/var/backup/database:$PGDATA" \
             -p 5432:5432 \
             postgres:13-alpine
