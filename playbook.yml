@@ -1,0 +1,15 @@
+- hosts: all
+  tasks:
+    - name: Deploy using docker
+      environment:
+        POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+        PGDATA: /var/lib/postgresql/data/pgdata
+      shell: |-
+        docker stop database | xargs docker rm || true
+        docker run -d \
+            --name database \
+            -e PGDATA \
+            -e POSTGRES_PASSWORD \
+            -v /var/backup/database:/var/lib/postgresql/data \
+            -p 5432:5432 \
+            postgres:13-alpine
