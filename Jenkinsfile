@@ -11,13 +11,13 @@ pipeline {
         stage('deploy') {
             steps {
                 sh '''
-                echo "$SSH_PRIVATE_KEY" >key
+                eval $(ssh-agent -s)
+                echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
                 echo "$ANSIBLE_INVENTORY" >inventory
-                chmod 0600 key
                 ansible-playbook \
                     --inventory "inventory" \
                     --ssh-common-args '-o StrictHostKeyChecking=no' \
-                    --extra-vars "{\"POSTGRES_PASSWORD\": \"$POSTGRES_PASSWORD\", \"SSH_PRIVATE_KEY_FILE\": \"key\"}" \
+                    --extra-vars "{\"POSTGRES_PASSWORD\": \"$POSTGRES_PASSWORD\"}" \
                     ./playbook.yml
                 '''
             }
