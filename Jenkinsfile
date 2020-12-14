@@ -11,14 +11,10 @@ pipeline {
         stage('deploy') {
             steps {
                 sh '''
-                eval $(ssh-agent -s)
-                echo "HEREEEEEEEEEEEEEEEEEEEEEE 1"
-                echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-                echo "HEREEEEEEEEEEEEEEEEEEEEEE 2"
                 ansible-playbook \
                     --inventory "$ANSIBLE_INVENTORY" \
                     --ssh-common-args '-o StrictHostKeyChecking=no' \
-                    --extra-vars "{\"POSTGRES_PASSWORD\": \"$POSTGRES_PASSWORD\"}" \
+                    --extra-vars "{\"POSTGRES_PASSWORD\": \"$POSTGRES_PASSWORD\", \"SSH_PRIVATE_KEY\": \"$SSH_PRIVATE_KEY\"}" \
                     ./playbook.yml
                 '''
             }
